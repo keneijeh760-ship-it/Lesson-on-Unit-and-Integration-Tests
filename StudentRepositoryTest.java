@@ -7,10 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+@DataJpaTest
 public class StudentRepositoryTest {
     @Autowired
     private StudentRepository studentRepository;
+
+    @AfterEach
+    void tearDown(){
+       studentRepository.deleteAll();
+    }
 
     @Test
     void itShouldCheckIfStudentExistsByEmail(){
@@ -27,4 +32,16 @@ public class StudentRepositoryTest {
 
 
     }
+    @Test
+    void itShouldCheckIfStudentEmailDoesNotExist(){
+        String email = "jamila@gmail.com";
+        boolean exist = studentRepository.selectExistsEmail(email);
+
+
+        assertThat(exist).isFalse();
+
+
+    }
+
+    
 }
